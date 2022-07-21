@@ -3,6 +3,7 @@ package com.zr.aligntextview;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -21,7 +22,8 @@ public class MainActivity extends AppCompatActivity {
         bt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                atv.setText("test");
+                CharSequence text = atv.getText();
+                Log.i("=====","==CharSequence==="+text);
             }
         });
         atv = findViewById(R.id.atv);
