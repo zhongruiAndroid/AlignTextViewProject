@@ -72,7 +72,6 @@ public class AlignTextView extends AppCompatTextView {
     private int flag = Spannable.SPAN_EXCLUSIVE_EXCLUSIVE;
 
     private CharSequence computeTextLength(CharSequence text) {
-
         if (TextUtils.isEmpty(text)) {
             return text;
         }
@@ -84,7 +83,7 @@ public class AlignTextView extends AppCompatTextView {
         if (lineCount == 1) {
             return text;
         }
-        int measuredWidth = getMeasuredWidth();
+        int measuredWidth = getMeasuredWidth() - getPaddingLeft() - getPaddingRight();
         TextPaint paint = getPaint();
         Rect rect;
         CharSequence charSequence;
@@ -127,15 +126,15 @@ public class AlignTextView extends AppCompatTextView {
                 builder.append(charText);
                 int spanEnd = builder.length();
 
-
-                /*如果剩余的宽度小于之前计算的,就不用继续加间距了*/
-                int remainderWidth = (int) (spaceWidth - tempWidth);
-                /*如果目前的间距超过每行间距总和，也不需要继续加间距了*/
-                if (remainderWidth <= 0 || tempWidth >= spaceWidth - 1) {
-                    continue;
-                }
                 /*如果是当前行的最后一个字，就不用加间距了*/
                 if (j >= lineEnd - 1) {
+                    continue;
+                }
+
+                /*如果剩余的宽度小于之前计算的,就不用继续加间距了*/
+                int remainderWidth = (spaceWidth - tempWidth);
+                /*如果目前的间距超过每行间距总和，也不需要继续加间距了*/
+                if (remainderWidth <= 0 || tempWidth >= spaceWidth-2) {
                     continue;
                 }
 
