@@ -39,7 +39,20 @@ public class AlignTextView extends AppCompatTextView {
         super(context, attrs, defStyleAttr);
     }
 
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        if (!setTextFlag) {
+            Log.i("=====","====2222222222=");
+            AlignTextView.super.setText(computeTextLength(originText));
+        } else {
+            Log.i("=====","====3333333333=");
+            setTextFlag = false;
+        }
+    }
+
     private CharSequence originText;
+    private boolean setTextFlag;
 
     @Override
     public CharSequence getText() {
@@ -52,20 +65,17 @@ public class AlignTextView extends AppCompatTextView {
         }
         return originText;
     }
-
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void setText(CharSequence text, BufferType type) {
         if (TextUtils.equals(text, originText)) {
             return;
         }
-        originText = text;
-        post(new Runnable() {
-            @Override
-            public void run() {
-                AlignTextView.super.setText(computeTextLength(text), type);
-            }
-        });
-        super.setText(originText, type);
+        if (!setTextFlag) {
+            originText = text;
+        }
+        Log.i("=====","====1111111111=");
+        super.setText(text, type);
+        requestLayout();
     }
 
 
@@ -134,7 +144,7 @@ public class AlignTextView extends AppCompatTextView {
                 /*如果剩余的宽度小于之前计算的,就不用继续加间距了*/
                 int remainderWidth = (spaceWidth - tempWidth);
                 /*如果目前的间距超过每行间距总和，也不需要继续加间距了*/
-                if (remainderWidth <= 0 || tempWidth >= spaceWidth-2) {
+                if (remainderWidth <= 0 || tempWidth >= spaceWidth - 2) {
                     continue;
                 }
 
@@ -159,6 +169,7 @@ public class AlignTextView extends AppCompatTextView {
         int lineStart = layout.getLineStart(lineCount - 1);
         int lineEnd = layout.getLineEnd(lineCount - 1);
         builder.append(text.subSequence(lineStart, lineEnd));
+        setTextFlag = true;
         return builder;
     }
 }
